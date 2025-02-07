@@ -27,11 +27,17 @@ function Homescreen() {
     const [category, setCategory] = useState('');
     const [date, setDate] = useState('');
 
+    const [editingTransaction, setEditingTransaction] = useState(null);
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6384'];
 
     useEffect(() => {
         const fetchData = async () => {
             try {
+
+                const userResponse = await axios.get(`/api/user/${user._id}`);
+                const updatedUser = userResponse.data;
+                setMoneyLeft(updatedUser.moneyLeft);
+
                 const response = await axios.get('/api/transaction/getusertransactions', {
                     params: { userid: user._id },
                 });
@@ -64,7 +70,7 @@ function Homescreen() {
                 const totalExpense = filteredExpense.reduce((sum, transaction) => sum + transaction.amount, 0);
                 setTotalExpense(totalExpense);
 
-                setMoneyLeft(total - totalExpense);
+                //setMoneyLeft(total - totalExpense);
 
                 const categoryAggregation = {};
                 filteredExpense.forEach(transaction => {
@@ -135,6 +141,48 @@ function Homescreen() {
         }
     };
 
+    const startEditingTransaction = (transactions) => {
+        setEditingTransaction(transactions);
+        setDate(transactions.date);
+        setDescription(transactions.description);
+        setType(transactions.type);
+        setCategory(transactions.category);
+        setAmount(transactions.amount);
+    };
+
+    const updateTransaction = async (e) => {
+        e.preventDefault();
+        try {
+
+            console.log("RADI 1")
+            await axios.put('/api/transaction/updatetransaction', {
+
+                type: type,
+                amount: parseFloat(amount),
+                description: description,
+                category: category,
+                date: date,
+                userid: user._id,
+                transactionid: editingTransaction._id
+            });
+
+            console.log("RADI 2")
+
+            alert("Transaction updated successfully!");
+            setEditingTransaction(null);
+
+
+            const response = await axios.get('/api/transaction/getusertransactions', {
+                params: { userid: user._id },
+            });
+            const data = response.data;
+            setTransactions(data);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error updating goal:", error);
+        }
+    };
+
     return (
         <div className="container my-4">
             <h1 className="text-center mb-4">Expenses</h1>
@@ -145,7 +193,7 @@ function Homescreen() {
                     <div className="card text-white bg-success mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Total Income</h5>
-                            <p className="card-text">${totalIncome.toFixed(2)}</p>
+                            <p className="card-text"> {user.currency} {totalIncome.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
@@ -153,7 +201,7 @@ function Homescreen() {
                     <div className="card text-white bg-danger mb-3">
                         <div className="card-body">
                             <h5 className="card-title">Total Expenses</h5>
-                            <p className="card-text">${totalExpense.toFixed(2)}</p>
+                            <p className="card-text"> {user.currency} {totalExpense.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
@@ -167,7 +215,7 @@ function Homescreen() {
                                     fontWeight: 'bold',
                                  }}
                             >
-                                ${moneyLeft.toFixed(2)}</p>
+                                {user.currency} {moneyLeft.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
@@ -204,7 +252,7 @@ function Homescreen() {
                     <br />
                     {/* Sorting Dropdown */}
                     <div className="mb-4 d-flex justify-content-center">
-                        <h1>edit</h1>
+                        
                         <select
                             className="form-select w-auto"
                             value={`${sortCriteria}-${sortOrder}`}
@@ -243,6 +291,7 @@ function Homescreen() {
                                         <th>Type</th>
                                         <th>Category</th>
                                         <th>Amount</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -255,6 +304,10 @@ function Homescreen() {
                                                 <td>{transaction.type}</td>
                                                 <td>{transaction.category}</td>
                                                 <td>${transaction.amount.toFixed(2)}</td>
+                                                <td><button className="btn btn-warning"
+                                                    onClick={() => startEditingTransaction(transaction)}>
+                                                    Edit
+                                                </button></td>
                                             </tr>
                                         ))}
                                 </tbody>
@@ -335,6 +388,18 @@ function Homescreen() {
                                         />
                                     </div>
                                     <div className="mb-3">
+                                        <label>Add new category</label>
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="newCat"
+                                            value={category} // Dodano za dvosmerno vezivanje
+                                            onChange={e => setCategory(e.target.value)}
+                                            placeholder='Enter new Category'
+                                        />
+                                    </div>
+
+                                    <div className="mb-3">
                                         <label>Category</label>
                                         <select
                                             className="form-select"
@@ -342,11 +407,18 @@ function Homescreen() {
                                             onChange={e => setCategory(e.target.value)}
                                             required
                                         >
-                                            <option value="" disabled>Select a category</option>
-                                            <option value="rent">Rent</option>
-                                            <option value="car payment">Car Payment</option>
-                                            <option value="tax">Tax</option>
-                                            <option value="misc expense">Misc</option>
+                                            {/* Ako je input prazan, opcija 'Adding new' se onemogućava */}
+                                            <option value="" disabled>
+                                                Select a category
+                                            </option>
+                                            <option value="new" disabled={category.trim() === ''}>
+                                                Adding new: {category.trim() || 'Enter a category above'}
+                                            </option>
+                                            {categoryData.map((cat, index) => (
+                                                <option key={index} value={cat.name}>
+                                                    {cat.name}
+                                                </option>
+                                            ))}
                                         </select>
                                     </div>
                                     <div className="mb-3">
@@ -367,6 +439,26 @@ function Homescreen() {
                         </div>
                     </div>
                 </div>
+            )}
+
+            {editingTransaction && (
+                <form onSubmit={updateTransaction} className="mt-3">
+                    <h3>Update Transaction</h3>
+                    <input type="date" className="form-control mb-2"
+                        value={date ? new Date(date).toISOString().split("T")[0] : ""}
+                        onChange={(e) => setDate(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={description} onChange={(e) => setDescription(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={type} onChange={(e) => setType(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={category} onChange={(e) => setCategory(e.target.value)} required />
+
+                    <input type="number" className="form-control mb-2"
+                        value={amount} onChange={(e) => setAmount(e.target.value)} required />
+
+                    <button type="submit" className="btn btn-warning w-100">Update Transaction</button>
+                </form>
             )}
         </div>
     );

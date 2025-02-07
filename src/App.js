@@ -6,6 +6,7 @@ import Homescreen from './screens/Homescreen';
 import Expensescreen from './screens/Expensescreen';
 import Registerscreen from './screens/Registerscreen';
 import Loginscreen from './screens/Loginscreen';
+import Goalscreen from './screens/Goalscreen';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/expense" element={<Expensescreen />} />
         <Route path="/register" element={<Registerscreen />} />
         <Route path="/login" element={<Loginscreen />} />
+        <Route path="/goals" element={<Goalscreen />} />
 
         </Routes>
         </BrowserRouter>
