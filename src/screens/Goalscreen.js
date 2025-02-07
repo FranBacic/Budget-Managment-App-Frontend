@@ -12,6 +12,10 @@ function Goalscreen() {
     const [moneyLeft, setMoneyLeft] = useState(0);
     const [showAddGoalForm, setShowAddGoalForm] = useState(false);
 
+    if (!user) {
+        window.location.href = '/login';
+    }
+
     useEffect(() => {
         const fetchGoals = async () => {
             try {

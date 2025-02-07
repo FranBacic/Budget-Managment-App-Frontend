@@ -47,10 +47,10 @@ function Navbar() {
                             </div>
                         </>) : <>
                             <li className="nav-item">
-                                <a className="nav-link" href="/register">Registriraj se</a>
+                                <a className="nav-link" href="/register">Register</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/login">Prijavi se</a>
+                                <a className="nav-link" href="/login">Login</a>
                             </li>
                         </>}
 

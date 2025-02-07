@@ -3,7 +3,6 @@ import axios from "axios";
 // import Loader from '../components/Loader';
 // import Error from '../components/Error';
 // import Success from '../components/Success';
-// import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 
 function Registerscreen() {
     const [name, setName] = useState('');
@@ -14,8 +13,6 @@ function Registerscreen() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [success, setSuccess] = useState('');
-    const [passwordVisible, setPasswordVisible] = useState(false);
-    const [cpasswordVisible, setCpasswordVisible] = useState(false);
 
     function validateEmail(email) {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -46,7 +43,6 @@ function Registerscreen() {
             email,
             currency,
             password
-            
         };
 
         try {
@@ -57,7 +53,7 @@ function Registerscreen() {
 
             setName('');
             setEmail('');
-            setCurrency('');
+            setCurrency('EUR');
             setPassword('');
             setCpassword('');
         } catch (error) {
@@ -73,60 +69,41 @@ function Registerscreen() {
 
             <div className="row justify-content-center mt-5">
                 <div className="col-md-5">
-                    <div className='bs'>
-                        <h1>Registriraj se</h1>
+                    <div className="card shadow-lg p-4">
+                        <h1>Register</h1>
                         {/* {success && (<Success message={
-                            <>
-                                Registracija uspješna! Odite na <a href="/login">login</a> kako bi se prijavili.
-                            </>
+                            <>Registracija uspješna! Odite na <a href="/login">login</a> kako bi se prijavili.</>
                         } />)} */}
                         {/* {error && (<Error message={error} />)} */}
 
-                        <input type="text" className='form-control' placeholder='Name' value={name} onChange={(e) => { setName(e.target.value) }} />
-                        <input type="text" className='form-control' placeholder='Email' value={email} onChange={(e) => { setEmail(e.target.value) }} />
-                        {/* <input type="text" className='form-control' placeholder='Currency' value={currency} onChange={(e) => { setCurrency(e.target.value) }} /> */}
+                        <input type="text" className='form-control' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" className='form-control' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
 
-                        <select value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                        <select className='form-control' value={currency} onChange={(e) => setCurrency(e.target.value)}>
                             <option value="EUR">EUR</option>
                             <option value="USD">USD</option>
                         </select>
 
-                        <div className="password-input-container">
-                            <input
-                                type={passwordVisible ? "text" : "password"}
-                                className='form-control'
-                                placeholder='Password'
-                                value={password}
-                                onChange={(e) => { setPassword(e.target.value) }}
-                            />
-                            {/* <span
-                                className="password-toggle-icon"
-                                onClick={() => setPasswordVisible(!passwordVisible)}
-                            >
-                                {passwordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                            </span> */}
-                        </div>
+                        <input
+                            type="password"
+                            className='form-control'
+                            placeholder='Password'
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
 
-                        <div className="password-input-container">
-                            <input
-                                type={cpasswordVisible ? "text" : "password"}
-                                className='form-control'
-                                placeholder='Repeat Password'
-                                value={cpassword}
-                                onChange={(e) => { setCpassword(e.target.value) }}
-                            />
-                            {/* <span
-                                className="password-toggle-icon"
-                                onClick={() => setCpasswordVisible(!cpasswordVisible)}
-                            >
-                                {cpasswordVisible ? <EyeOutlined /> : <EyeInvisibleOutlined />}
-                            </span> */}
-                        </div>
+                        <input
+                            type="password"
+                            className='form-control'
+                            placeholder='Repeat Password'
+                            value={cpassword}
+                            onChange={(e) => setCpassword(e.target.value)}
+                        />
 
-                        <button className='btn btn-primary mt-3' onClick={register}>Registriraj se!</button>
+                        <button className='btn btn-primary mt-3' onClick={register}>Register!</button>
                         <br />
                         <button className="btn btn-link mt-4">
-                            <a href="/login">Već imate profil? Prijavi se!</a>
+                            <a href="/login">Already have a profile? Go to the login page!</a>
                         </button>
                     </div>
                 </div>

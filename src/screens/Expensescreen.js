@@ -30,6 +30,11 @@ function Homescreen() {
     const [editingTransaction, setEditingTransaction] = useState(null);
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6384'];
 
+    if (!user) {
+        window.location.href = '/login';
+    }
+
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -191,7 +196,7 @@ function Homescreen() {
             <div className="row mb-4">
                 <div className="col-md-4">
                     <div className="card text-white bg-success mb-3">
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <h5 className="card-title">Total Income</h5>
                             <p className="card-text"> {user.currency} {totalIncome.toFixed(2)}</p>
                         </div>
@@ -199,7 +204,7 @@ function Homescreen() {
                 </div>
                 <div className="col-md-4">
                     <div className="card text-white bg-danger mb-3">
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <h5 className="card-title">Total Expenses</h5>
                             <p className="card-text"> {user.currency} {totalExpense.toFixed(2)}</p>
                         </div>
@@ -207,7 +212,7 @@ function Homescreen() {
                 </div>
                 <div className="col-md-4">
                     <div className="card text-white bg-info mb-3">
-                        <div className="card-body">
+                        <div className="card-body text-center">
                             <h5 className="card-title">Money Left</h5>
                             <p
                                 className="card-text"

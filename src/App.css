@@ -1,5 +1,24 @@
+/* App.css */
 .App {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  
+}
+
+main {
+  flex: 1;
+  
+}
+
+.social-icons a {
+  transition: transform 0.2s ease-in-out;
+}
+
+.social-icons a:hover {
+  transform: scale(1.2);
+  color: #007bff;
+  /* Plava nijansa */
 }
 
 .App-logo {
