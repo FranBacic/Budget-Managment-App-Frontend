@@ -8,6 +8,8 @@ import Expensescreen from './screens/Expensescreen';
 import Registerscreen from './screens/Registerscreen';
 import Loginscreen from './screens/Loginscreen';
 import Goalscreen from './screens/Goalscreen';
+import Profilescreen from './screens/Profilescreen';
+import Adminscreen from './screens/Adminscreen';
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
             <Route path="/register" element={<Registerscreen />} />
             <Route path="/login" element={<Loginscreen />} />
             <Route path="/goals" element={<Goalscreen />} />
+            <Route path="/profile" element={<Profilescreen />} />
+            <Route path="/admin" element={<Adminscreen />} />
           </Routes>
         </BrowserRouter>
       </main>

@@ -19,6 +19,7 @@ function Homescreen() {
     const [totalExpense, setTotalExpense] = useState(0);
     const [moneyLeft, setMoneyLeft] = useState(0);
     const [categoryData, setCategoryData] = useState([]);
+    const [currentCategoryData, setCurrentCategoryData] = useState([]);
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     const [type, setType] = useState('expense');
@@ -78,7 +79,7 @@ function Homescreen() {
                 //setMoneyLeft(total - totalExpense);
 
                 const categoryAggregation = {};
-                filteredExpense.forEach(transaction => {
+                data.forEach(transaction => {
                     if (categoryAggregation[transaction.category]) {
                         categoryAggregation[transaction.category] += transaction.amount;
                     } else {
@@ -91,6 +92,23 @@ function Homescreen() {
                     value: categoryAggregation[category],
                 }));
                 setCategoryData(categoryArray);
+
+
+
+                const currentMonthCategoryAggregation = {};
+                filteredExpense.forEach(transaction => {
+                    if (currentMonthCategoryAggregation[transaction.category]) {
+                        currentMonthCategoryAggregation[transaction.category] += transaction.amount;
+                    } else {
+                        currentMonthCategoryAggregation[transaction.category] = transaction.amount;
+                    }
+                });
+
+                const currentMonthCategoryArray = Object.keys(currentMonthCategoryAggregation).map(category => ({
+                    name: category,
+                    value: currentMonthCategoryAggregation[category],
+                }));
+                setCurrentCategoryData(currentMonthCategoryArray);
             } catch (error) {
                 console.log(error);
             }
@@ -231,7 +249,7 @@ function Homescreen() {
                 <div className="col-md-6">
                     <PieChart width={400} height={400}>
                         <Pie
-                            data={categoryData}
+                            data={currentCategoryData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
@@ -239,7 +257,7 @@ function Homescreen() {
                             fill="#8884d8"
                             dataKey="value"
                         >
-                            {categoryData.map((entry, index) => (
+                            {currentCategoryData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={COLORS[index % COLORS.length]}

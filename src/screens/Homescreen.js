@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
+
 function Homescreen() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
+    const [allTransactions, setAllTransactions] = useState([]);
     const [transactions, setTransactions] = useState([]);
     const [sortedTransactions, setSortedTransactions] = useState([]);
     const [sortCriteria, setSortCriteria] = useState('date'); // default sort by date
@@ -11,6 +13,7 @@ function Homescreen() {
     const [filteredCategory, setFilteredCategory] = useState('all'); // New state for category filter
     const [currentPage, setCurrentPage] = useState(1);
     const rowsPerPage = 10;
+    const [showModal, setShowModal] = useState(false);
 
     const [incomeTransactions, setIncomeTransactions] = useState([]);
     const [expenseTransactions, setExpenseTransactions] = useState([]);
@@ -18,6 +21,7 @@ function Homescreen() {
     const [totalExpense, setTotalExpense] = useState(0);
     const [moneyLeft, setMoneyLeft] = useState(0);
     const [categoryData, setCategoryData] = useState([]);
+    const [currentCategoryData, setCurrentCategoryData] = useState([]);
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     const [type, setType] = useState('income');
@@ -27,6 +31,7 @@ function Homescreen() {
     const [date, setDate] = useState('');
 
     const [editingTransaction, setEditingTransaction] = useState(null);
+    const [deletingTransaction, setDeletingTransaction] = useState(null);
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6384'];
 
     if (!user) {
@@ -45,7 +50,8 @@ function Homescreen() {
                     params: { userid: user._id },
                 });
                 const data = response.data;
-                setTransactions(data);
+
+                setAllTransactions(data);
                 setSortedTransactions([...data]);
 
                 const currentDate = new Date();
@@ -77,7 +83,7 @@ function Homescreen() {
                 //setMoneyLeft(total - totalExpense);
 
                 const categoryAggregation = {};
-                filteredIncome.forEach(transaction => {
+                data.forEach(transaction => {
                     if (categoryAggregation[transaction.category]) {
                         categoryAggregation[transaction.category] += transaction.amount;
                     } else {
@@ -90,9 +96,27 @@ function Homescreen() {
                     value: categoryAggregation[category],
                 }));
                 setCategoryData(categoryArray);
-            } catch (error) {
-                console.log(error);
-            }
+
+
+
+            const currentMonthCategoryAggregation = {};
+            filteredIncome.forEach(transaction => {
+                if (currentMonthCategoryAggregation[transaction.category]) {
+                    currentMonthCategoryAggregation[transaction.category] += transaction.amount;
+                } else {
+                    currentMonthCategoryAggregation[transaction.category] = transaction.amount;
+                }
+            });
+
+            const currentMonthCategoryArray = Object.keys(currentMonthCategoryAggregation).map(category => ({
+                name: category,
+                value: currentMonthCategoryAggregation[category],
+            }));
+            setCurrentCategoryData(currentMonthCategoryArray);
+        } catch (error) {
+            console.log(error);
+        }
+            
         };
 
         fetchData();
@@ -187,8 +211,29 @@ function Homescreen() {
         }
     };
 
+    const startDeletingTransaction = (transaction) => {
+        console.log("Deleting transaction:", transaction);
+        setDeletingTransaction(transaction);
+    };
+
+
+    const handleDelete = async (transactionid) => {
+        console.log("Handling delete for transaction ID:", transactionid);
+            try {
+                await axios.delete(`/api/transaction/deleteTransaction/${transactionid}`);
+                alert("Transaction deleted successfully!");
+                window.location.reload();
+            } catch (error) {
+                console.error("Error deleting transaction:", error);
+            }
+        
+    };
+
+
     return (
-        <div className="container my-4">
+
+        
+<div className="container my-4">
             <h1 className="text-center mb-4">Income</h1>
 
             {/* Summary Section */}
@@ -231,7 +276,7 @@ function Homescreen() {
                 <div className="col-md-6">
                     <PieChart width={400} height={400}>
                         <Pie
-                            data={categoryData}
+                            data={currentCategoryData}
                             cx="50%"
                             cy="50%"
                             labelLine={false}
@@ -239,7 +284,7 @@ function Homescreen() {
                             fill="#8884d8"
                             dataKey="value"
                         >
-                            {categoryData.map((entry, index) => (
+                            {currentCategoryData.map((entry, index) => (
                                 <Cell
                                     key={`cell-${index}`}
                                     fill={COLORS[index % COLORS.length]}
@@ -296,7 +341,8 @@ function Homescreen() {
                                         <th>Type</th>
                                         <th>Category</th>
                                         <th>Amount</th>
-                                        <th>Action</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -312,11 +358,26 @@ function Homescreen() {
                                                 <td>                                    <button className="btn btn-warning"
                                                     onClick={() => startEditingTransaction(transaction)}>
                                                     Edit
-                                                </button></td>
+                                                </button>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-danger mx-2 mt-2"
+                                                        onClick={() => {
+                                                            console.log("Delete button clicked for:", transaction);
+                                                            startDeletingTransaction(transaction);
+                                                        }}>
+                                                        Delete
+                                                    </button>
+
+
+                                                </td>
                                             </tr>
                                         ))}
                                 </tbody>
                             </table>
+
+
                             {/* Pagination Controls */}
                             <div className="d-flex justify-content-between align-items-center mt-3">
                                 <button
@@ -353,8 +414,8 @@ function Homescreen() {
                     </div>
                 </div>
             </div>
-
-
+            
+                    
 
 
 
@@ -475,7 +536,16 @@ function Homescreen() {
                     <button type="submit" className="btn btn-warning w-100">Update Transaction</button>
                 </form>
             )}
+
+            {deletingTransaction && (
+                <div>
+                    <p>Are you sure you want to delete this transaction?</p>
+                    <button onClick={() => handleDelete(deletingTransaction._id)}>Confirm</button>
+                    <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
+                </div>
+            )}
         </div>
+
     );
 }
 
