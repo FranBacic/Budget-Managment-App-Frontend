@@ -10,6 +10,7 @@ import Loginscreen from './screens/Loginscreen';
 import Goalscreen from './screens/Goalscreen';
 import Profilescreen from './screens/Profilescreen';
 import Adminscreen from './screens/Adminscreen';
+import Landingscreen from './screens/Landingscreen';
 
 function App() {
   return (
@@ -19,14 +20,16 @@ function App() {
       <main>
         <BrowserRouter>
           <Routes>
-            <Route path="/home" element={<Homescreen />} />
+            <Route path="/income" element={<Homescreen />} />
             <Route path="/expense" element={<Expensescreen />} />
             <Route path="/register" element={<Registerscreen />} />
             <Route path="/login" element={<Loginscreen />} />
             <Route path="/goals" element={<Goalscreen />} />
             <Route path="/profile" element={<Profilescreen />} />
             <Route path="/admin" element={<Adminscreen />} />
+            <Route path="/" element={<Landingscreen />} />
           </Routes>
+
         </BrowserRouter>
       </main>
 

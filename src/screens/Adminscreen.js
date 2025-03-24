@@ -14,7 +14,9 @@ function Adminscreen() {
 
 
     return ( 
+        
         <div>
+            <h1 className="text-center mb-4">Admin Panel</h1>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Users</button>
@@ -54,19 +56,19 @@ export function Users() {
         const [expenseTransactions, setExpenseTransactions] = useState([]);
         const [totalIncome, setTotalIncome] = useState(0);
         const [totalExpense, setTotalExpense] = useState(0);
-        const [moneyLeft, setMoneyLeft] = useState(0);
+
         const [categoryData, setCategoryData] = useState([]);
         const [currentCategoryData, setCurrentCategoryData] = useState([]);
         const [isFormVisible, setIsFormVisible] = useState(false);
     
-        const [type, setType] = useState('income');
-        const [amount, setAmount] = useState('');
-        const [description, setDescription] = useState('');
-        const [category, setCategory] = useState('');
-        const [date, setDate] = useState('');
+        const [name, setName] = useState('income');
+        const [email, setEmail] = useState('');
+        const [isAdmin, setIsAdmin] = useState('');
+        const [currency, setCurrency] = useState('');
+        const [moneyLeft, setMoneyLeft] = useState(0);
     
-        const [editingTransaction, setEditingTransaction] = useState(null);
-        const [deletingTransaction, setDeletingTransaction] = useState(null);
+        const [editingUser, setEditingUser] = useState(null);
+        const [deletingUser, setDeletingUser] = useState(null);
         const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6384'];
 
         const [allUsers, setAllUsers] = useState([]);
@@ -159,6 +161,69 @@ export function Users() {
         fetchData();
     }, []);
 
+
+
+    const startEditingUser = (users) => {
+        setEditingUser(users);
+        setName(users.name);
+        setEmail(users.email);
+        setIsAdmin(users.isAdmin);
+        setCurrency(users.currency);
+        setMoneyLeft(users.moneyLeft);
+    };
+
+    const updateUser = async (e) => {
+        e.preventDefault();
+        try {
+
+            if (!editingUser) {
+                console.error("No user selected for editing!");
+                return;
+            }
+
+            console.log("RADI 1")
+            await axios.put('/api/user/updateuser', {
+
+                userid: editingUser._id,
+                name: name,
+                email: email,
+                isAdmin: isAdmin,
+                currency: currency,
+                moneyLeft: parseFloat(moneyLeft),
+            });
+
+            console.log("RADI 2")
+
+            alert("User updated successfully!");
+            setEditingUser(null);
+
+            const allUsersResponse = await axios.get(`/api/user/getallusers`);
+            const allUsers = allUsersResponse.data;
+            setAllUsers(allUsers);
+
+        } catch (error) {
+            console.error("Error updating goal:", error);
+        }
+    };
+
+        const startDeletingUser = (user) => {
+            console.log("Deleting User:", user);
+            setDeletingUser(user);
+        };
+    
+    
+        const handleDelete = async (userid) => {
+            console.log("Handling delete for User ID:", userid);
+                try {
+                    await axios.delete(`/api/user/deleteUser/${userid}`);
+                    alert("User deleted successfully!");
+                    window.location.reload();
+                } catch (error) {
+                    console.error("Error deleting user:", error);
+                }
+            
+        };
+
     return(
         <div className="container mt-4">
             {allUsers.length > 0 ? (
@@ -193,13 +258,8 @@ export function Users() {
                                         <td>{user.currency}</td>
                                         <td className="fw-bold">{user.moneyLeft}</td>
                                         <td>
-                                            <button
-                                                className="btn btn-warning btn-sm"
-                                                onClick={() => {
-                                                    console.log("Edit button clicked for:", user);
-                                                    ;
-                                                }}
-                                            >
+                                            <button className="btn btn-warning btn-sm"
+                                                onClick={() => startEditingUser(user)}>
                                                 Edit
                                             </button>
                                         </td>
@@ -208,9 +268,8 @@ export function Users() {
                                                 className="btn btn-danger btn-sm"
                                                 onClick={() => {
                                                     console.log("Delete button clicked for:", user);
-                                                   ;
-                                                }}
-                                            >
+                                                    startDeletingUser(user);
+                                                }}>
                                                 Delete
                                             </button>
                                         </td>
@@ -242,6 +301,32 @@ export function Users() {
                 </div>
             ) : (
                 <p className="text-center text-muted fs-5">No transactions found.</p>
+            )}
+
+            {editingUser && (
+                <form onSubmit={updateUser} className="mt-3">
+                    <h3>Update User</h3>
+                    <input type="text" className="form-control mb-2"
+                        value={name} onChange={(e) => setName(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={isAdmin} onChange={(e) => setIsAdmin(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={currency} onChange={(e) => setCurrency(e.target.value)} required />
+                    <input type="number" className="form-control mb-2"
+                        value={moneyLeft} onChange={(e) => setMoneyLeft(e.target.value)} required />
+
+                    <button type="submit" className="btn btn-warning w-100">Update User</button>
+                </form>
+            )}
+
+            {deletingUser && (
+                <div>
+                    <p>Are you sure you want to delete user <b>{deletingUser.name}</b>?</p>
+                    <button onClick={() => handleDelete(deletingUser._id)}>Confirm</button>
+                    <button onClick={() => setDeletingUser(null)}>Cancel</button>
+                </div>
             )}
         </div>
     )
@@ -365,9 +450,54 @@ export function Transactions() {
         setAmount(transactions.amount);
     };
 
+    const updateTransaction = async (e) => {
+        e.preventDefault();
+        try {
+
+            console.log("RADI 1")
+            await axios.put('/api/transaction/updatetransaction', {
+
+                type: type,
+                amount: parseFloat(amount),
+                description: description,
+                category: category,
+                date: date,
+                userid: user._id,
+                transactionid: editingTransaction._id
+            });
+
+            console.log("RADI 2")
+
+            alert("Transaction updated successfully!");
+            setEditingTransaction(null);
+
+
+            const response = await axios.get('/api/transaction/getusertransactions', {
+                params: { userid: user._id },
+            });
+            const data = response.data;
+            setTransactions(data);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error updating goal:", error);
+        }
+    };
+
     const startDeletingTransaction = (transaction) => {
         console.log("Deleting transaction:", transaction);
         setDeletingTransaction(transaction);
+    };
+
+    const handleDelete = async (transactionid) => {
+        console.log("Handling delete for transaction ID:", transactionid);
+        try {
+            await axios.delete(`/api/transaction/deleteTransaction/${transactionid}`);
+            alert("Transaction deleted successfully!");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+        }
+
     };
 
     return (
@@ -392,7 +522,7 @@ export function Transactions() {
                                 .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
                                 .map((transaction, index) => (
                                     <tr key={index} className="align-middle text-center">
-                                        <td>{userMap[transaction.userid] || 'Unknown User'}</td>
+                                        <td>{userMap[transaction.userid] || 'Unknown or Deleted User'}</td>
                                         <td>{new Date(transaction.date).toLocaleDateString()}</td>
                                         <td>{transaction.description}</td>
                                         <td>
@@ -451,6 +581,34 @@ export function Transactions() {
                 </div>
             ) : (
                 <p className="text-center text-muted fs-5">No transactions found.</p>
+            )}
+
+            {editingTransaction && (
+                <form onSubmit={updateTransaction} className="mt-3">
+                    <h3>Update Transaction</h3>
+                    <input type="date" className="form-control mb-2"
+                        value={date ? new Date(date).toISOString().split("T")[0] : ""}
+                        onChange={(e) => setDate(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={description} onChange={(e) => setDescription(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={type} onChange={(e) => setType(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={category} onChange={(e) => setCategory(e.target.value)} required />
+
+                    <input type="number" className="form-control mb-2"
+                        value={amount} onChange={(e) => setAmount(e.target.value)} required />
+
+                    <button type="submit" className="btn btn-warning w-100">Update Transaction</button>
+                </form>
+            )}
+
+            {deletingTransaction && (
+                <div>
+                    <p>Are you sure you want to delete this transaction "<b>{deletingTransaction.description}</b>"?</p>
+                    <button onClick={() => handleDelete(deletingTransaction._id)}>Confirm</button>
+                    <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
+                </div>
             )}
         </div>
     );

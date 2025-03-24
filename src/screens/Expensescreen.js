@@ -29,6 +29,7 @@ function Homescreen() {
     const [date, setDate] = useState('');
 
     const [editingTransaction, setEditingTransaction] = useState(null);
+    const [deletingTransaction, setDeletingTransaction] = useState(null);
     const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#FF6384'];
 
     if (!user) {
@@ -164,6 +165,24 @@ function Homescreen() {
         }
     };
 
+    const startDeletingTransaction = (transaction) => {
+        console.log("Deleting transaction:", transaction);
+        setDeletingTransaction(transaction);
+    };
+
+
+    const handleDelete = async (transactionid) => {
+        console.log("Handling delete for transaction ID:", transactionid);
+        try {
+            await axios.delete(`/api/transaction/deleteTransaction/${transactionid}`);
+            alert("Transaction deleted successfully!");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+        }
+
+    };
+
     const startEditingTransaction = (transactions) => {
         setEditingTransaction(transactions);
         setDate(transactions.date);
@@ -213,7 +232,7 @@ function Homescreen() {
             {/* Summary Section */}
             <div className="row mb-4">
                 <div className="col-md-4">
-                    <div className="card text-white bg-success mb-3">
+                    <div className="card text-black bg-success mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Income</h5>
                             <p className="card-text"> {user.currency} {totalIncome.toFixed(2)}</p>
@@ -221,7 +240,7 @@ function Homescreen() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-danger mb-3">
+                    <div className="card text-black bg-danger mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Expenses</h5>
                             <p className="card-text"> {user.currency} {totalExpense.toFixed(2)}</p>
@@ -229,7 +248,7 @@ function Homescreen() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-info mb-3">
+                    <div className="card text-black bg-info mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Money Left</h5>
                             <p
@@ -306,31 +325,45 @@ function Homescreen() {
                     </div>
                     {sortedTransactions.length > 0 ? (
                         <div className="table-responsive">
-                            <table className="table table-striped table-hover">
-                                <thead className="table-dark">
+                            <table className="table table-striped table-hover table-bordered">
+                                <thead className="table-dark text-center">
                                     <tr>
                                         <th>Date</th>
                                         <th>Description</th>
                                         <th>Type</th>
                                         <th>Category</th>
                                         <th>Amount</th>
-                                        <th>Action</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {sortedTransactions
                                         .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
                                         .map((transaction, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className='align-middle text-center'>
                                                 <td>{new Date(transaction.date).toLocaleDateString()}</td>
                                                 <td>{transaction.description}</td>
                                                 <td>{transaction.type}</td>
                                                 <td>{transaction.category}</td>
                                                 <td>${transaction.amount.toFixed(2)}</td>
-                                                <td><button className="btn btn-warning"
+                                                <td><button className="btn btn-warning btn-sm"
                                                     onClick={() => startEditingTransaction(transaction)}>
                                                     Edit
-                                                </button></td>
+                                                </button>
+                                                </td>
+                                                <td>
+                                                    <button
+                                                        className="btn btn-danger btn-sm"
+                                                        onClick={() => {
+                                                            console.log("Delete button clicked for:", transaction);
+                                                            startDeletingTransaction(transaction);
+                                                        }}>
+                                                        Delete
+                                                    </button>
+
+
+                                                </td>
                                             </tr>
                                         ))}
                                 </tbody>
@@ -482,6 +515,14 @@ function Homescreen() {
 
                     <button type="submit" className="btn btn-warning w-100">Update Transaction</button>
                 </form>
+            )}
+
+            {deletingTransaction && (
+                <div>
+                    <p>Are you sure you want to delete this transaction "<b>{deletingTransaction.description}</b>"?</p>
+                    <button onClick={() => handleDelete(deletingTransaction._id)}>Confirm</button>
+                    <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
+                </div>
             )}
         </div>
     );

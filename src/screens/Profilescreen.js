@@ -139,9 +139,54 @@ export function Transactions() {
         setAmount(transactions.amount);
     };
 
+    const updateTransaction = async (e) => {
+        e.preventDefault();
+        try {
+
+            console.log("RADI 1")
+            await axios.put('/api/transaction/updatetransaction', {
+
+                type: type,
+                amount: parseFloat(amount),
+                description: description,
+                category: category,
+                date: date,
+                userid: user._id,
+                transactionid: editingTransaction._id
+            });
+
+            console.log("RADI 2")
+
+            alert("Transaction updated successfully!");
+            setEditingTransaction(null);
+
+
+            const response = await axios.get('/api/transaction/getusertransactions', {
+                params: { userid: user._id },
+            });
+            const data = response.data;
+            setTransactions(data);
+            window.location.reload();
+        } catch (error) {
+            console.error("Error updating goal:", error);
+        }
+    };
+
     const startDeletingTransaction = (transaction) => {
         console.log("Deleting transaction:", transaction);
         setDeletingTransaction(transaction);
+    };
+
+    const handleDelete = async (transactionid) => {
+        console.log("Handling delete for transaction ID:", transactionid);
+        try {
+            await axios.delete(`/api/transaction/deleteTransaction/${transactionid}`);
+            alert("Transaction deleted successfully!");
+            window.location.reload();
+        } catch (error) {
+            console.error("Error deleting transaction:", error);
+        }
+
     };
 
     return (
@@ -222,7 +267,37 @@ export function Transactions() {
             ) : (
                 <p className="text-center text-muted fs-5">No transactions found.</p>
             )}
+
+            {editingTransaction && (
+                <form onSubmit={updateTransaction} className="mt-3">
+                    <h3>Update Transaction</h3>
+                    <input type="date" className="form-control mb-2"
+                        value={date ? new Date(date).toISOString().split("T")[0] : ""}
+                        onChange={(e) => setDate(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={description} onChange={(e) => setDescription(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={type} onChange={(e) => setType(e.target.value)} required />
+                    <input type="text" className="form-control mb-2"
+                        value={category} onChange={(e) => setCategory(e.target.value)} required />
+
+                    <input type="number" className="form-control mb-2"
+                        value={amount} onChange={(e) => setAmount(e.target.value)} required />
+
+                    <button type="submit" className="btn btn-warning w-100">Update Transaction</button>
+                </form>
+            )}
+
+            {deletingTransaction && (
+                <div>
+                    <p>Are you sure you want to delete this transaction "<b>{deletingTransaction.description}</b>"?</p>
+                    <button onClick={() => handleDelete(deletingTransaction._id)}>Confirm</button>
+                    <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
+                </div>
+            )}
         </div>
+
+        
     );
 
 }

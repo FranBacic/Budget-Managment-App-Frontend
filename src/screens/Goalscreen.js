@@ -107,7 +107,7 @@ function Goalscreen() {
             
 
             <div className="d-flex justify-content-center my-4">
-                <div className="card text-white bg-info mb-3" style={{ width: "40rem" }}>
+                <div className="card text-black bg-info mb-3" style={{ width: "40rem" }}>
                     <div className="card-body text-center">
                         <h5 className="card-title">Money Left</h5>
                         <p
@@ -125,77 +125,83 @@ function Goalscreen() {
 
 
             <h3 className="mt-4">Your Goals</h3>
-            <ul className="list-group">
-                {goals.length > 0 ? (
-                    goals.map((goal) => {
-                        const progress = (goal.moneySaved / goal.goalAmount) * 100;
-                        return (
-                            <li key={goal._id} className="list-group-item">
-                                <div className="d-flex justify-content-between align-items-center">
-                                    <div style={{ width: '75%' }}>
-                                        <h5 className="text-center p-2 mb-2" style={{
-                                            border: '2px solid #007bff',
-                                            borderRadius: '8px',
-                                            backgroundColor: '#f8f9fa',
-                                            display: 'inline-block',
-                                            padding: '5px 15px',
-                                            fontWeight: 'bold'
-                                        }}>
-                                            {goal.name}
-                                        </h5>
-                                        <p className="mb-1">
-                                            <strong>Total Goal:</strong> {user.currency} {goal.goalAmount}
-                                            &nbsp;| <strong>Saved:</strong> {user.currency} {goal.moneySaved}
-                                        </p>
-                                        <div className="progress" style={{ height: '10px' }}>
-                                            <div className="progress-bar bg-primary" role="progressbar"
-                                                style={{ width: `${progress}%` }}
-                                                aria-valuenow={progress}
-                                                aria-valuemin="0"
-                                                aria-valuemax="100">
-                                            </div>
-                                        </div>
-                                    </div>
+            <div className="table-responsive">
+                <table className="table table-striped table-hover table-bordered">
+                    <thead className="table-dark text-center">
+                        <tr>
+                            <th>Goal Name</th>
+                            <th>Saved</th>
+                            <th>Total Goal</th>
+                            <th>Progress</th>
+                            <th>Add Money</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {goals.length > 0 ? (
+                            goals.map((goal) => {
+                                const progress = (goal.moneySaved / goal.goalAmount) * 100;
 
-                                    <button className="btn btn-success me-2"
-                                        onClick={() => setSelectedGoalId(selectedGoalId === goal._id ? null : goal._id)}>
-                                        {selectedGoalId === goal._id ? 'Cancel' : 'Add Money'}
-                                    </button>
-
-                                    <button className="btn btn-warning"
-                                        onClick={() => startEditingGoal(goal)}>
-                                        Edit
-                                    </button>
-                                    
-                                </div>
-
-                                {selectedGoalId === goal._id && (
-                                    <div className="mt-3">
-                                        <div className="card p-3">
-                                            <h5 className="text-center">Add Money to Goal</h5>
-                                            <form onSubmit={addMoneyToGoal}>
-                                                <div className="mb-3">
-                                                    <label>Amount</label>
-                                                    <input type="number" className="form-control"
-                                                        value={moneySaved}
-                                                        onChange={e => setMoneySaved(e.target.value)}
-                                                        placeholder='Enter Amount' required />
+                                return (
+                                    <tr key={goal._id} className="align-middle text-center">
+                                        <td className="fw-bold">{goal.name}</td>
+                                        <td>{user.currency} {goal.moneySaved}</td>
+                                        <td>{user.currency} {goal.goalAmount}</td>
+                                        <td>
+                                            <div className="progress" style={{ height: '10px' }}>
+                                                <div className="progress-bar bg-primary"
+                                                    role="progressbar"
+                                                    style={{ width: `${progress}%` }}
+                                                    aria-valuenow={progress}
+                                                    aria-valuemin="0"
+                                                    aria-valuemax="100">
                                                 </div>
-                                                <button type="submit" className="btn btn-primary w-100"
-                                                    disabled={parseFloat(goal.moneySaved) >= parseFloat(goal.goalAmount)}>
-                                                    Add Money
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                )}
-                            </li>
-                        );
-                    })
-                ) : (
-                    <p className="text-center">No goals added yet.</p>
-                )}
-            </ul>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-success btn-sm"
+                                                onClick={() => setSelectedGoalId(selectedGoalId === goal._id ? null : goal._id)}>
+                                                {selectedGoalId === goal._id ? 'Cancel' : 'Add Money'}
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button className="btn btn-warning btn-sm"
+                                                onClick={() => startEditingGoal(goal)}>
+                                                Edit
+                                            </button>
+                                        </td>
+                                    </tr>
+                                );
+                            })
+                        ) : (
+                            <tr>
+                                <td colSpan="6" className="text-center">No goals added yet.</td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+            </div>
+
+            {/* Forma za dodavanje novca se prikazuje ispod ako je cilj selektovan */}
+            {selectedGoalId && (
+                <div className="card p-3 mt-3">
+                    <h5 className="text-center">Add Money to Goal</h5>
+                    <form onSubmit={addMoneyToGoal}>
+                        <div className="mb-3">
+                            <label>Amount</label>
+                            <input type="number" className="form-control"
+                                value={moneySaved}
+                                onChange={e => setMoneySaved(e.target.value)}
+                                placeholder='Enter Amount' required />
+                        </div>
+                        <button type="submit" className="btn btn-primary w-100"
+                            disabled={parseFloat(goals.find(g => g._id === selectedGoalId)?.moneySaved) >= parseFloat(goals.find(g => g._id === selectedGoalId)?.goalAmount)}>
+                            Add Money
+                        </button>
+                    </form>
+                </div>
+            )}
+
 
             <div className="text-center mt-3">
                 <button className="btn btn-primary" onClick={() => setShowAddGoalForm(!showAddGoalForm)}>

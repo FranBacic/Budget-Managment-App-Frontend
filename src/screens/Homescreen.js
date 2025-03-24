@@ -239,7 +239,7 @@ function Homescreen() {
             {/* Summary Section */}
             <div className="row mb-4">
                 <div className="col-md-4">
-                    <div className="card text-white bg-success mb-3">
+                    <div className="card text-black bg-success mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Income</h5>
                             <p className="card-text">{user.currency} {totalIncome.toFixed(2)}</p>
@@ -247,7 +247,7 @@ function Homescreen() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-danger mb-3">
+                    <div className="card text-black bg-danger mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Expenses</h5>
                             <p className="card-text">{user.currency} {totalExpense.toFixed(2)}</p>
@@ -255,7 +255,7 @@ function Homescreen() {
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-white bg-info mb-3">
+                    <div className="card text-black bg-info mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Money Left</h5>
                             <p
@@ -333,8 +333,8 @@ function Homescreen() {
                     </div>
                     {sortedTransactions.length > 0 ? (
                         <div className="table-responsive">
-                            <table className="table table-striped table-hover">
-                                <thead className="table-dark">
+                            <table className="table table-striped table-hover table-bordered">
+                                <thead className="table-dark text-center">
                                     <tr>
                                         <th>Date</th>
                                         <th>Description</th>
@@ -349,20 +349,20 @@ function Homescreen() {
                                     {sortedTransactions
                                         .slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
                                         .map((transaction, index) => (
-                                            <tr key={index}>
+                                            <tr key={index} className='align-middle text-center'>
                                                 <td>{new Date(transaction.date).toLocaleDateString()}</td>
                                                 <td>{transaction.description}</td>
                                                 <td>{transaction.type}</td>
                                                 <td>{transaction.category}</td>
                                                 <td>${transaction.amount.toFixed(2)}</td>
-                                                <td>                                    <button className="btn btn-warning"
+                                                <td><button className="btn btn-warning btn-sm"
                                                     onClick={() => startEditingTransaction(transaction)}>
                                                     Edit
                                                 </button>
                                                 </td>
                                                 <td>
                                                     <button
-                                                        className="btn btn-danger mx-2 mt-2"
+                                                        className="btn btn-danger btn-sm"
                                                         onClick={() => {
                                                             console.log("Delete button clicked for:", transaction);
                                                             startDeletingTransaction(transaction);
@@ -539,7 +539,7 @@ function Homescreen() {
 
             {deletingTransaction && (
                 <div>
-                    <p>Are you sure you want to delete this transaction?</p>
+                    <p>Are you sure you want to delete this transaction "<b>{deletingTransaction.description}</b>"?</p>
                     <button onClick={() => handleDelete(deletingTransaction._id)}>Confirm</button>
                     <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
                 </div>
