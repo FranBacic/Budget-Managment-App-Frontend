@@ -1,5 +1,7 @@
 A web app for personal budget managment created with JavaScript, React, Bootstrap, Node.js and MongoDB.
 
+
+
 ![Screenshot 2025-03-27 120408](https://github.com/user-attachments/assets/4b55b1a4-16ed-4851-8cf6-371ddd12a427)
 
 ![Screenshot 2025-03-27 121057](https://github.com/user-attachments/assets/688385e2-0f02-49ba-8a35-06226996f422)
