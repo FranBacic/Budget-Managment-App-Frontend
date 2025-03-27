@@ -67,7 +67,7 @@ function Registerscreen() {
         <div>
             {/* {loading && (<Loader />)} */}
 
-            <div className="row justify-content-center mt-5">
+            <div className="landing-container  justify-content-center ">
                 <div className="col-md-5">
                     <div className="card shadow-lg p-4">
                         <h1>Register</h1>
@@ -76,17 +76,17 @@ function Registerscreen() {
                         } />)} */}
                         {/* {error && (<Error message={error} />)} */}
 
-                        <input type="text" className='form-control' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
-                        <input type="text" className='form-control' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
+                        <input type="text" className='form-control mb-3' placeholder='Name' value={name} onChange={(e) => setName(e.target.value)} />
+                        <input type="text" className='form-control mb-3' placeholder='Email' value={email} onChange={(e) => setEmail(e.target.value)} />
 
-                        <select className='form-control' value={currency} onChange={(e) => setCurrency(e.target.value)}>
+                        <select className='form-control mb-3' value={currency} onChange={(e) => setCurrency(e.target.value)}>
                             <option value="EUR">EUR</option>
                             <option value="USD">USD</option>
                         </select>
 
                         <input
                             type="password"
-                            className='form-control'
+                            className='form-control mb-3'
                             placeholder='Password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
@@ -102,9 +102,7 @@ function Registerscreen() {
 
                         <button className='btn btn-primary mt-3' onClick={register}>Register!</button>
                         <br />
-                        <button className="btn btn-link mt-4">
-                            <a href="/login">Already have a profile? Go to the login page!</a>
-                        </button>
+                        <a href="/login" className="btn mt-3 mb-3">Already have an account? Log in here!</a>
                     </div>
                 </div>
             </div>

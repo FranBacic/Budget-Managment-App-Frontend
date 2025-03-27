@@ -12,7 +12,9 @@ function Navbar() {
     }
 
     return (
+        
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+            
             <div className="container">
 
                 <a className="navbar-brand d-flex align-items-center" href="/">
@@ -35,7 +37,7 @@ function Navbar() {
 
 
                 <div className="collapse navbar-collapse" id="navbarNav">
-                    {/* Left side - Income, Expense, Goals */}
+
                     <ul className="navbar-nav me-auto">
                         <li className="nav-item">
                             <a
@@ -110,6 +112,7 @@ function Navbar() {
                 </div>
             </div>
         </nav>
+        
     );
 }
 

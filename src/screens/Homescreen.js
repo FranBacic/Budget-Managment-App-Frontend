@@ -232,30 +232,36 @@ function Homescreen() {
 
     return (
 
-        
+<div className='landing-container'>      
 <div className="container my-4">
             <h1 className="text-center mb-4">Income</h1>
 
             {/* Summary Section */}
             <div className="row mb-4">
                 <div className="col-md-4">
-                    <div className="card text-black bg-success mb-3">
+                    <div className="card mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Income</h5>
-                            <p className="card-text">{user.currency} {totalIncome.toFixed(2)}</p>
+                                <p className="card-text" style={{
+                                    color: 'green',
+                                    fontWeight: 'bold',
+                                }}>{user.currency} {totalIncome.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-black bg-danger mb-3">
+                    <div className="card mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Total Expenses</h5>
-                            <p className="card-text">{user.currency} {totalExpense.toFixed(2)}</p>
+                                <p className="card-text"                                 style={{
+                                    color: 'red',
+                                    fontWeight: 'bold',
+                                }}>{user.currency} {totalExpense.toFixed(2)}</p>
                         </div>
                     </div>
                 </div>
                 <div className="col-md-4">
-                    <div className="card text-black bg-info mb-3">
+                    <div className="card  mb-3">
                         <div className="card-body text-center">
                             <h5 className="card-title">Money Left</h5>
                             <p
@@ -381,7 +387,7 @@ function Homescreen() {
                             {/* Pagination Controls */}
                             <div className="d-flex justify-content-between align-items-center mt-3">
                                 <button
-                                    className="btn btn-sm btn-primary"
+                                    className="btn btn-sm "
                                     onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                     disabled={currentPage === 1}
                                 >
@@ -391,7 +397,7 @@ function Homescreen() {
                                     Page {currentPage} of {Math.ceil(sortedTransactions.length / rowsPerPage)}
                                 </span>
                                 <button
-                                    className="btn btn-sm btn-primary"
+                                    className="btn btn-sm "
                                     onClick={() => setCurrentPage(prev => Math.min(prev + 1, Math.ceil(sortedTransactions.length / rowsPerPage)))}
                                     disabled={currentPage === Math.ceil(sortedTransactions.length / rowsPerPage)}
                                 >
@@ -406,7 +412,7 @@ function Homescreen() {
                     {/* Add Transaction Button */}
                     <div className="text-center mb-4">
                         <button
-                            className="btn btn-primary"
+                            className="btn btn-warning"
                             onClick={() => setIsFormVisible(!isFormVisible)}
                         >
                             {isFormVisible ? 'Cancel' : 'Add Transaction'}
@@ -544,6 +550,7 @@ function Homescreen() {
                     <button onClick={() => setDeletingTransaction(null)}>Cancel</button>
                 </div>
             )}
+        </div>
         </div>
 
     );

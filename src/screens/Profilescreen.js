@@ -190,6 +190,7 @@ export function Transactions() {
     };
 
     return (
+        <div className="landing-container">
         <div className="container mt-4">
             {allTransactions.length > 0 ? (
                 <div className="table-responsive">
@@ -296,6 +297,7 @@ export function Transactions() {
                 </div>
             )}
         </div>
+        </div>
 
         
     );
@@ -306,16 +308,19 @@ export function Profile() {
     const user = JSON.parse(localStorage.getItem('currentUser'));
 
     return (
-        <div className="container mt-5">
+        <div className="landing-container">
+        <div className="container ">
+                <h2 className="card-title mb-4 text-center " style={{color: "white"}}>Your Profile</h2>
             <div className="card shadow-lg">
                 <div className="card-body text-center">
-                    <h2 className="card-title mb-4">Your Profile</h2>
+                    
                     <p className="fs-5"><strong>Username:</strong> {user.name}</p>
                     <p className="fs-5"><strong>Email:</strong> {user.email}</p>
                     <p className="fs-5"><strong>Preferred Currency:</strong> {user.currency}</p>
                 </div>
             </div>
         </div>
+    </div >
     );
 }
 

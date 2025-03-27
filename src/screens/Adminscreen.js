@@ -14,9 +14,9 @@ function Adminscreen() {
 
 
     return ( 
-        
-        <div>
-            <h1 className="text-center mb-4">Admin Panel</h1>
+
+        <div className='heading-container'>
+            <h1 className="heading-container text-center mb-4">Admin Panel</h1>
             <ul class="nav nav-tabs" id="myTab" role="tablist">
                 <li class="nav-item" role="presentation">
                     <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Users</button>
@@ -225,10 +225,11 @@ export function Users() {
         };
 
     return(
+        <div className='landing-container'>
         <div className="container mt-4">
             {allUsers.length > 0 ? (
-                <div className="table-responsive">
-                    <table className="table table-striped table-hover table-bordered">
+                <div className="table-responsive ">
+                    <table className="table table-striped table-hover table-bordered mt-0">
                         <thead className="table-dark text-center">
                             <tr>
                                 <th>ID</th>
@@ -328,6 +329,7 @@ export function Users() {
                     <button onClick={() => setDeletingUser(null)}>Cancel</button>
                 </div>
             )}
+        </div>
         </div>
     )
 }
@@ -501,6 +503,7 @@ export function Transactions() {
     };
 
     return (
+        <div className="landing-container">
         <div className="container mt-4">
             {allTransactions.length > 0 ? (
                 <div className="table-responsive">
@@ -611,6 +614,7 @@ export function Transactions() {
                 </div>
             )}
         </div>
+        </div >
     );
 
 }

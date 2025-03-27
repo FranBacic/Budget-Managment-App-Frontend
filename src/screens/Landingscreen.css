@@ -1,0 +1,283 @@
+
+.landing-container {
+    background: linear-gradient(to right, #0a1f3d, #000000);
+
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 20px;
+}
+.heading-container {
+    background: linear-gradient(to right, #0a1f3d, #000000);
+}
+
+#myTab {
+    background: linear-gradient(to right, #0a1f3d, #000000);
+}
+
+
+.content-box {
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+
+h1 {
+    color: #f8f9fa;
+    
+
+}
+
+
+h2 {
+    color: #f8f9fa;
+
+}
+
+
+p {
+    color: #e0e0e0;
+
+}
+
+
+.btn-warning {
+    background-color: #f8b800;
+
+    border-color: #f8b800;
+
+}
+
+.btn-light {
+    background-color: #6c757d;
+
+    border-color: #6c757d;
+
+}
+
+
+.card {
+    background: rgba(255, 255, 255, 0.1);
+
+    color: white;
+    
+
+    border-radius: 15px;
+
+    transition: transform 0.3s ease-in-out;
+    padding: 30px;
+
+}
+
+/* .card:hover {
+    transform: scale(1.05);
+} */
+
+
+.card h3 {
+    color: #f8f9fa;
+
+}
+
+
+.card p {
+    color: #e0e0e0;
+
+}
+
+
+.table {
+    background-color: rgba(0, 0, 0, 0);
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+}
+
+
+.table th {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    color: white;
+
+    text-align: center;
+
+}
+
+
+.table td {
+    background-color: rgba(0, 0, 0, 0.3);
+
+    color: white;
+
+}
+
+
+.table tr:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+
+    cursor: pointer;
+
+}
+
+
+.table .btn {
+    color: white;
+    border: 1px solid white;
+}
+
+.table .btn-warning {
+    background-color: #f8b800;
+    border-color: #f8b800;
+}
+
+.table .btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+
+.form-select {
+    background-color: rgba(0, 0, 0, 0.5);
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.2);
+
+}
+
+
+.form-select:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+
+.form-select:focus {
+    background-color: rgba(0, 0, 0, 0.9);
+    border-color: #f8b800;
+    outline: none;
+}
+
+
+.table .btn {
+    color: white;
+
+    background-color: rgba(0, 0, 0, 0);
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn {
+    color: white;
+
+    background-color: rgba(0, 0, 0, 0);
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    transition: background-color 0.3s, color 0.3s;
+}
+
+
+.table .btn-warning {
+    color: #28a745;
+
+    border-color: #28a745;
+
+}
+
+
+.table .btn-danger {
+    color: #ff0000;
+
+    border-color: #ff0000;
+
+}
+
+
+.table .btn:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+
+}
+
+
+.table .btn-warning:hover {
+    color: #ffffff;
+
+    background-color: #28a745;
+
+}
+
+
+.table .btn-danger:hover {
+    color: #ffffff;
+
+    background-color: #ff0000;
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.form-control,
+.form-select {
+    background-color: transparent;
+
+    color: white;
+
+    border: 1px solid rgba(255, 255, 255, 0.5);
+
+    padding: 10px;
+}
+
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+
+}
+
+
+.form-control:focus,
+.form-select:focus {
+    background-color: transparent;
+
+    border-color: white;
+
+    color: white;
+    box-shadow: none;
+
+}
+
+
+.form-select option {
+    background-color: black;
+
+    color: white;
+}
+
+
+.btn-success {
+    background-color: transparent;
+
+    border: 1px solid green;
+
+    color: green;
+
+}

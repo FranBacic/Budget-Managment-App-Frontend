@@ -1,5 +1,38 @@
-
 .active-section {
-font-weight: bold;
-color: white;
+    font-weight: bold;
+    color: white !important;
+}
+
+.navbar {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    background: linear-gradient(to right, #0a1f3d, #000000);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease-in-out;
+    z-index: 1000;
+
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link.active-section {
+    color: #f8b800;
+}
+
+
+.navbar.scrolled {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+
+body {
+    padding-top: 60px;
+    background: linear-gradient(to right, #0a1f3d, #000000);
+
 }

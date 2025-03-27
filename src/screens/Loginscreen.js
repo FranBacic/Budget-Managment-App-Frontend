@@ -50,6 +50,7 @@ function Loginscreen() {
     };
 
     return (
+        <div className='landing-container'>
         <div className="container mt-5">
             <div className="row justify-content-center">
                 <div className="col-md-5">
@@ -77,11 +78,12 @@ function Loginscreen() {
                         </button>
 
                         <div className="text-center mt-3">
-                            <button className="btn btn-link" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
+                            <button className="btn  mb-3" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">
                                 Forgot password?
                             </button>
+                            
                             <br />
-                            <a href="/register" className="btn btn-link">Don't have an account? Register here!</a>
+                            <a href="/register" className="btn  mb-3">Don't have an account? Register here!</a>
                         </div>
                     </div>
                 </div>
@@ -112,6 +114,7 @@ function Loginscreen() {
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     );
 }

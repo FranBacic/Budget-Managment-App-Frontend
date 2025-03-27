@@ -1,8 +1,11 @@
 import React from 'react';
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
+import './Footer.css';
+
 function Footer() {
     return (
-        <footer className="bg-dark text-light text-center py-3 mt-5">
+        
+        <footer className="footer  text-center py-3 ">
             <p>&copy; {new Date().getFullYear()} Budget Management App. All rights reserved.</p>
 
             <div className="social-icons mt-2">
@@ -17,6 +20,7 @@ function Footer() {
                 </a>
             </div>
         </footer>
+
     );
 }
 

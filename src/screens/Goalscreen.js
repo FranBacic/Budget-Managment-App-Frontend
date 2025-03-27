@@ -102,29 +102,29 @@ function Goalscreen() {
     };
 
     return (
+        <div className='landing-container'> 
         <div className="container my-4">
             <h1 className="text-center">Your Goals</h1>
             
 
             <div className="d-flex justify-content-center my-4">
-                <div className="card text-black bg-info mb-3" style={{ width: "40rem" }}>
-                    <div className="card-body text-center">
-                        <h5 className="card-title">Money Left</h5>
-                        <p
-                            className="card-text"
-                            style={{
-                                color: moneyLeft > 0 ? "green" : "red",
-                                fontWeight: "bold",
-                            }}
-                        >
-                            {user.currency} {moneyLeft.toFixed(2)}
-                        </p>
+                    <div className="card  mb-3 " style={{ width: "40rem"}}>
+                        <div className="card-body text-center">
+                            <h5 className="card-title">Money Left</h5>
+                            <p
+                                className="card-text"
+                                style={{
+                                    color: moneyLeft > 0 ? 'green' : 'red',
+                                    fontWeight: 'bold',
+                                }}
+                            >
+                                {user.currency} {moneyLeft.toFixed(2)}</p>
+                        </div>
                     </div>
-                </div>
             </div>
 
 
-            <h3 className="mt-4">Your Goals</h3>
+            
             <div className="table-responsive">
                 <table className="table table-striped table-hover table-bordered">
                     <thead className="table-dark text-center">
@@ -237,6 +237,7 @@ function Goalscreen() {
                     <button type="submit" className="btn btn-warning w-100">Update Goal</button>
                 </form>
             )}
+        </div>
         </div>
     );
 }
